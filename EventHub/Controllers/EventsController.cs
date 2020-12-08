@@ -1,5 +1,7 @@
 ﻿using EventHub.Models;
 using EventHub.ViewModels;
+using Microsoft.AspNet.Identity;
+using System;
 using System.Linq;
 using System.Web.Mvc;
 
@@ -16,6 +18,7 @@ namespace EventHub.Controllers
 
 
 
+        [Authorize]
         public ActionResult Create()
         {
             var viewModel = new EventFormViewModel
@@ -24,6 +27,25 @@ namespace EventHub.Controllers
             };
 
             return View(viewModel);
+        }
+
+        //convert viewModel to Event object, save to context (DB)
+        [Authorize]
+        [HttpPost]
+        public ActionResult Create(EventFormViewModel viewModel)
+        {
+            var eventObject = new Event
+            {
+                ArtistId = User.Identity.GetUserId(),
+                DateTime = DateTime.Parse(string.Format($"{viewModel.Date}-{viewModel.Time}")),
+                GenreId = viewModel.Genre,
+                Venue = viewModel.Venue
+            };
+
+            _context.Events.Add(eventObject);
+            _context.SaveChanges();
+
+            return RedirectToAction("Index", "Home");
         }
     }
 }

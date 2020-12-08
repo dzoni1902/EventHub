@@ -7,8 +7,10 @@ namespace EventHub.Models
     {
         public int Id { get; set; }
 
+        public ApplicationUser Artist { get; set; }     //navigation prop
+
         [Required]
-        public ApplicationUser Artist { get; set; }
+        public string ArtistId { get; set; }    //string - because in ApplicationUser, Id is a string (Guid)
 
         public DateTime DateTime { get; set; }
 
@@ -16,7 +18,9 @@ namespace EventHub.Models
         [StringLength(255)]
         public string Venue { get; set; }
 
+        public Genre Genre { get; set; }    //navigation prop
+
         [Required]
-        public Genre Genre { get; set; }
+        public byte GenreId { get; set; }    //this and ArtistId are foreign keys
     }
 }

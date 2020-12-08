@@ -190,6 +190,10 @@
     <Compile Include="Migrations\202012081155269_PopulateGenresTable.Designer.cs">
       <DependentUpon>202012081155269_PopulateGenresTable.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202012081636058_AddForeignKeysToEvent.cs" />
+    <Compile Include="Migrations\202012081636058_AddForeignKeysToEvent.Designer.cs">
+      <DependentUpon>202012081636058_AddForeignKeysToEvent.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\ApplicationDbContext.cs" />
@@ -287,6 +291,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202012081155269_PopulateGenresTable.resx">
       <DependentUpon>202012081155269_PopulateGenresTable.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202012081636058_AddForeignKeysToEvent.resx">
+      <DependentUpon>202012081636058_AddForeignKeysToEvent.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
