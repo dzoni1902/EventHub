@@ -1,7 +1,6 @@
 ﻿using EventHub.Models;
 using EventHub.ViewModels;
 using Microsoft.AspNet.Identity;
-using System;
 using System.Linq;
 using System.Web.Mvc;
 
@@ -37,7 +36,7 @@ namespace EventHub.Controllers
             var eventObject = new Event
             {
                 ArtistId = User.Identity.GetUserId(),
-                DateTime = DateTime.Parse(string.Format($"{viewModel.Date}-{viewModel.Time}")),
+                DateTime = viewModel.DateTime,
                 GenreId = viewModel.Genre,
                 Venue = viewModel.Venue
             };

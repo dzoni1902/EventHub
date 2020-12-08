@@ -1,4 +1,5 @@
 ﻿using EventHub.Models;
+using System;
 using System.Collections.Generic;
 
 namespace EventHub.ViewModels
@@ -11,5 +12,7 @@ namespace EventHub.ViewModels
         public string Time { get; set; }
         public byte Genre { get; set; }  //type is int - because of dropdown list (GenreId in DB)
         public IEnumerable<Genre> Genres { get; set; }
+
+        public DateTime DateTime => DateTime.Parse(string.Format($"{Date}-{Time}"));
     }
 }
