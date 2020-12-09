@@ -16,7 +16,7 @@ namespace EventHub.Controllers
         }
 
 
-
+        //Action for clicking on Add an Event link in navbar
         [Authorize]
         public ActionResult Create()
         {
@@ -33,10 +33,18 @@ namespace EventHub.Controllers
         [HttpPost]
         public ActionResult Create(EventFormViewModel viewModel)
         {
+            if (!ModelState.IsValid)
+            {
+                //we need to initialize and populate Genres prop since viewModel is 
+                //new model initialized with values from the httpRequest
+                viewModel.Genres = _context.Genres.ToList();
+                return View("Create", viewModel);
+            }
+
             var eventObject = new Event
             {
                 ArtistId = User.Identity.GetUserId(),
-                DateTime = viewModel.DateTime,
+                DateTime = viewModel.GetDateTime(),
                 GenreId = viewModel.Genre,
                 Venue = viewModel.Venue
             };
