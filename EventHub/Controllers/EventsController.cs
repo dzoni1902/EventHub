@@ -31,6 +31,7 @@ namespace EventHub.Controllers
         //convert viewModel to Event object, save to context (DB)
         [Authorize]
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public ActionResult Create(EventFormViewModel viewModel)
         {
             if (!ModelState.IsValid)
