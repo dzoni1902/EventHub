@@ -23,6 +23,11 @@ textarea {
     max-width: 280px;
 }
 
+span.field-validation-error {
+    color: red;
+    font-weight: bold;
+}
+
 /* Bootstrap overrides (won't change bootstrap.css file) because any new version 
     would cause my changes to be lost.
 */
@@ -97,3 +102,4 @@ h6,
     -ms-border-radius: 9px;
     border-radius: 9px;
 }
+
