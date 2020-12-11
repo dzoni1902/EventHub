@@ -18,7 +18,9 @@ namespace EventHub.Controllers
 
         public ActionResult Index()
         {
-            var upcomingEvents = _context.Events.Include(e => e.Artist)
+            var upcomingEvents = _context.Events
+                .Include(e => e.Artist)
+                .Include(e => e.Genre)
                 .Where(e => e.DateTime > DateTime.Now)
                 .ToList();
 

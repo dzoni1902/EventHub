@@ -1,5 +1,5 @@
 ﻿body {
-    padding-top: 50px;
+    padding-top: 90px;
     padding-bottom: 20px;
 }
 
@@ -103,3 +103,52 @@ h6,
     border-radius: 9px;
 }
 
+/* site specific styles */
+/* li just bellow events element */
+
+.events {
+    list-style: none;
+}
+
+.events > li {
+    position: relative;
+    margin-bottom: 30px;
+}
+
+.events > li .details {
+    position: absolute;
+    top: 0;
+    left: 70px;
+}
+
+.events > li .date {
+    background: red;
+    color: white;
+    text-align: center;
+    width: 60px;
+    -ms-border-radius: 8px;
+    border-radius: 8px;
+}
+
+.events > li .date .month {
+    text-transform: uppercase;
+    font-size: 14px;
+    font-weight: bold;
+    padding: 2px 6px;
+}
+
+.events > li .date .day { 
+    background: #f7f7f7;
+    color: #333;
+    font-size: 20px;
+    padding: 6px 12px;
+}
+
+.events > li .details .artist {
+    font-weight: bold;
+    display: block;     /* because span is inline element */
+}
+
+.events > li .details .genre { 
+    font-size: 15px;
+}
