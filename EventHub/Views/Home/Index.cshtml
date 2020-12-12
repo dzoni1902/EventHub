@@ -12,10 +12,31 @@
                 <div class="day">@evnt.DateTime.ToString("d ")</div>
             </div> 
             <div class="details">
-                <span class="artist">@evnt.Artist.Name</span> 
+                <span class="artist going">@evnt.Artist.Name</span> 
                 <span class="genre">@evnt.Genre.Name</span>
+                <button data-event-id="@evnt.Id" class="btn btn-default btn-sm pull-right js-toggle-attendance">Going ?</button>
             </div>      
-
         </li>
     }
 </ul>
+
+@section scripts
+{
+    <script>
+        $(document).ready(function () {
+            $(".js-toggle-attendance").click(function(e) {
+                //making an ajax call to the API using POST method:
+                let button = $(e.target);
+                $.post("/api/attendances", { EventId: button.attr("data-event-id") })
+                    .done(function() {
+                        button.removeClass("btn-default")
+                            .addClass("btn-info")
+                            .text("Going");
+                    })
+                    .fail(function() {
+                        alert("Something failed!");
+                });
+            });
+        });
+    </script>
+}
