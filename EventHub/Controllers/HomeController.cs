@@ -3,6 +3,7 @@ using System;
 using System.Data.Entity;
 using System.Linq;
 using System.Web.Mvc;
+using EventHub.ViewModels;
 
 
 namespace EventHub.Controllers
@@ -24,7 +25,13 @@ namespace EventHub.Controllers
                 .Where(e => e.DateTime > DateTime.Now)
                 .ToList();
 
-            return View(upcomingEvents);
+            var viewModel = new HomeViewModel
+            {
+                UpcomingEvents = upcomingEvents,
+                ShowActions = User.Identity.IsAuthenticated
+            };
+
+            return View(viewModel);
         }
 
         public ActionResult About()

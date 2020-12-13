@@ -1,10 +1,10 @@
-﻿@model IEnumerable<EventHub.Models.Event>
+﻿@model EventHub.ViewModels.HomeViewModel
 @{
     ViewBag.Title = "Home Page";
 }
 
 <ul class="events">
-    @foreach (var evnt in Model)
+    @foreach (var evnt in Model.UpcomingEvents)
     {
         <li>
             <div class="date">
@@ -12,9 +12,18 @@
                 <div class="day">@evnt.DateTime.ToString("d ")</div>
             </div> 
             <div class="details">
-                <span class="artist">@evnt.Artist.Name <button data-followee-id="@evnt.ArtistId" class="btn btn-link btn-sm js-toggle-follow">Follow</button></span> 
+                <span class="artist">
+                    @evnt.Artist.Name
+                    @if (Model.ShowActions)
+                    {
+                        <button data-followee-id="@evnt.ArtistId" class="btn btn-link btn-sm js-toggle-follow">Follow</button>
+                    }
+                </span>
                 <span class="genre">@evnt.Genre.Name</span>
-                <button data-event-id="@evnt.Id" class="btn btn-default btn-sm pull-right js-toggle-attendance">Going ?</button>
+                @if (Model.ShowActions)
+                {
+                    <button data-event-id="@evnt.Id" class="btn btn-default btn-sm pull-right js-toggle-attendance">Going ?</button>
+                }
             </div>      
         </li>
     }
