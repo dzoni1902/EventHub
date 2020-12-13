@@ -1,9 +1,10 @@
-﻿@model EventHub.ViewModels.HomeViewModel
+﻿@model EventHub.ViewModels.EventsViewModel
 @{
     ViewBag.Title = "Home Page";
 }
 
-<ul class="events">
+<h1>@Model.Heading</h1>
+<ul class="events vertical-offset4">
     @foreach (var evnt in Model.UpcomingEvents)
     {
         <li>

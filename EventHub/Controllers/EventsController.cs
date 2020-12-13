@@ -1,6 +1,7 @@
 ﻿using EventHub.Models;
 using EventHub.ViewModels;
 using Microsoft.AspNet.Identity;
+using System.Data.Entity;
 using System.Linq;
 using System.Web.Mvc;
 
@@ -54,6 +55,29 @@ namespace EventHub.Controllers
             _context.SaveChanges();
 
             return RedirectToAction("Index", "Home");
+        }
+
+        [Authorize]
+        [HttpGet]
+        public ActionResult Attending()
+        {
+            var userId = User.Identity.GetUserId();
+
+            var events = _context.Attendances
+                .Where(a => a.AttendeeId == userId)
+                .Select(a => a.Event)
+                .Include(e => e.Artist)
+                .Include(e => e.Genre)
+                .ToList();
+
+            var viewModel = new EventsViewModel
+            {
+                UpcomingEvents = events,
+                ShowActions = User.Identity.IsAuthenticated,
+                Heading = "Events I'm attending"
+            };
+
+            return View("Events", viewModel);
         }
     }
 }
