@@ -12,7 +12,7 @@
                 <div class="day">@evnt.DateTime.ToString("d ")</div>
             </div> 
             <div class="details">
-                <span class="artist going">@evnt.Artist.Name</span> 
+                <span class="artist">@evnt.Artist.Name <button data-followee-id="@evnt.ArtistId" class="btn btn-link btn-sm js-toggle-follow">Follow</button></span> 
                 <span class="genre">@evnt.Genre.Name</span>
                 <button data-event-id="@evnt.Id" class="btn btn-default btn-sm pull-right js-toggle-attendance">Going ?</button>
             </div>      
@@ -26,7 +26,7 @@
         $(document).ready(function () {
             $(".js-toggle-attendance").click(function(e) {
                 //making an ajax call to the API using POST method:
-                let button = $(e.target);
+                var button = $(e.target);
                 $.post("/api/attendances", { EventId: button.attr("data-event-id") })
                     .done(function() {
                         button.removeClass("btn-default")
@@ -36,6 +36,17 @@
                     .fail(function() {
                         alert("Something failed!");
                 });
+            });
+
+            $(".js-toggle-follow").click(function(e) {
+                var button = $(e.target);
+                $.post("/api/followings", { FolloweeId: button.attr("data-followee-id") })
+                    .done(function() {
+                        button.text("Following");
+                    })
+                    .fail(function() {
+                        alert("Something failed!");
+                    });
             });
         });
     </script>
