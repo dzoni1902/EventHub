@@ -19,6 +19,9 @@
                     @evnt.Venue
                 </span>
                 <span class="genre">@evnt.Genre.Name</span>
+                <div class="actions">
+                    <a href="@Url.Action("Edit", "Events", new { id = evnt.Id })">Edit</a>
+                </div>
             </div>
         </li>
     }
