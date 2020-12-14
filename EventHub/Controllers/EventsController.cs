@@ -1,6 +1,7 @@
 ﻿using EventHub.Models;
 using EventHub.ViewModels;
 using Microsoft.AspNet.Identity;
+using System;
 using System.Data.Entity;
 using System.Linq;
 using System.Web.Mvc;
@@ -54,7 +55,7 @@ namespace EventHub.Controllers
             _context.Events.Add(eventObject);
             _context.SaveChanges();
 
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction("Mine", "Events");
         }
 
         [Authorize]
@@ -78,6 +79,19 @@ namespace EventHub.Controllers
             };
 
             return View("Events", viewModel);
+        }
+
+        [Authorize]
+        public ActionResult Mine()
+        {
+            var userId = User.Identity.GetUserId();
+
+            var events = _context.Events
+                .Where(e => e.ArtistId == userId && e.DateTime > DateTime.Now)
+                .Include(e => e.Genre)
+                .ToList();
+
+            return View(events);
         }
     }
 }
