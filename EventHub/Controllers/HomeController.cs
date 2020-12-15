@@ -22,7 +22,7 @@ namespace EventHub.Controllers
             var upcomingEvents = _context.Events
                 .Include(e => e.Artist)
                 .Include(e => e.Genre)
-                .Where(e => e.DateTime > DateTime.Now)
+                .Where(e => e.DateTime > DateTime.Now && !e.IsCanceled)
                 .ToList();
 
             var viewModel = new EventsViewModel

@@ -178,12 +178,13 @@
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\AccountController.cs" />
-    <Compile Include="Controllers\AttendancesController.cs" />
     <Compile Include="Controllers\EventsController.cs" />
-    <Compile Include="Controllers\FollowingsController.cs" />
     <Compile Include="Controllers\FoloweesController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
+    <Compile Include="Controllers\WebAPI\AttendancesController.cs" />
+    <Compile Include="Controllers\WebAPI\EventsController.cs" />
+    <Compile Include="Controllers\WebAPI\FollowingsController.cs" />
     <Compile Include="Dtos\AttendanceDto.cs" />
     <Compile Include="Dtos\FollowingDto.cs" />
     <Compile Include="Global.asax.cs">
@@ -221,6 +222,10 @@
     <Compile Include="Migrations\202012121937337_AddFollowing.Designer.cs">
       <DependentUpon>202012121937337_AddFollowing.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202012151205212_AddIsCanceledToEvent.cs" />
+    <Compile Include="Migrations\202012151205212_AddIsCanceledToEvent.Designer.cs">
+      <DependentUpon>202012151205212_AddIsCanceledToEvent.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\ApplicationDbContext.cs" />
     <Compile Include="Models\Attendance.cs" />
@@ -252,6 +257,7 @@
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
+    <Content Include="Scripts\bootbox.min.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="Content\bootstrap.css.map" />
@@ -345,6 +351,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202012121937337_AddFollowing.resx">
       <DependentUpon>202012121937337_AddFollowing.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202012151205212_AddIsCanceledToEvent.resx">
+      <DependentUpon>202012151205212_AddIsCanceledToEvent.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

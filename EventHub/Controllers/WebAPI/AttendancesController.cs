@@ -1,10 +1,10 @@
-﻿using EventHub.Dtos;
+﻿using System.Linq;
+using System.Web.Http;
+using EventHub.Dtos;
 using EventHub.Models;
 using Microsoft.AspNet.Identity;
-using System.Linq;
-using System.Web.Http;
 
-namespace EventHub.Controllers
+namespace EventHub.Controllers.WebAPI
 {
     [Authorize]
     public class AttendancesController : ApiController

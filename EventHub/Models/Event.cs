@@ -7,6 +7,8 @@ namespace EventHub.Models
     {
         public int Id { get; set; }
 
+        public bool IsCanceled { get; set; }
+
         public ApplicationUser Artist { get; set; }     //navigation prop
 
         [Required]

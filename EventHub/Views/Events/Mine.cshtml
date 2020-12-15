@@ -20,9 +20,57 @@
                 </span>
                 <span class="genre">@evnt.Genre.Name</span>
                 <div class="actions">
-                    <a href="@Url.Action("Edit", "Events", new { id = evnt.Id })">Edit</a>
+                    <a href="@Url.Action("Edit", "Events", new { id = evnt.Id })">Edit</a> |
+                    <a href="#" class="js-cancel-event" data-event-id="@evnt.Id">Cancel</a>
                 </div>
             </div>
         </li>
     }
 </ul>
+
+@section scripts
+{
+    <script>
+        $(document).ready(function() {
+            $(".js-cancel-event").click(function (e) {
+                var link = $(e.target);
+
+                bootbox.dialog({
+                    title: 'Confirm',
+                    message: "Are you sure you want to cancel this event?",
+                    buttons: {
+                        no: {
+                            label: "No",
+                            className: 'btn-default',
+                            callback: function() {
+                                bootbox.hideAll();
+                            }
+                        },
+                        yes: {
+                            label: "Yes",
+                            className: 'btn-danger',
+                            callback: function(){
+                                $.ajax({
+                                        url: "/api/events/" + link.attr("data-event-id"),
+                                        method: "DELETE" //Cancel action decorated with HttpDelete
+                                    }) //here we get a promise
+                                    .done(function() {
+                                        //remove the event from the page
+                                        link.parents("li").fadeOut(function() { //after fading call this func
+                                            $(this).remove(); //this == link.parents("li")
+                                        });
+                                    })
+                                    .fail(function() {
+                                        alert("Something failed!");
+                                    });
+                            }
+                        }
+                    }
+                });
+            });
+        }); 
+
+
+
+    </script>
+}

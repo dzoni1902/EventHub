@@ -89,8 +89,8 @@ namespace EventHub.Controllers
         {
             if (!ModelState.IsValid)
             {
-                //we need to initialize and populate Genres prop since viewModel is 
-                //new model initialized with values from the httpRequest
+                //we need to initialize and populate Genres prop since viewModel 
+                //is new model initialized with values from the httpRequest
                 viewModel.Genres = _context.Genres.ToList();
                 return View("EventForm", viewModel);
             }
@@ -136,7 +136,10 @@ namespace EventHub.Controllers
             var userId = User.Identity.GetUserId();
 
             var events = _context.Events
-                .Where(e => e.ArtistId == userId && e.DateTime > DateTime.Now)
+                .Where(e =>
+                    e.ArtistId == userId &&
+                    e.DateTime > DateTime.Now &&
+                    !e.IsCanceled)
                 .Include(e => e.Genre)
                 .ToList();
 
