@@ -1,5 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel.DataAnnotations;
+using System.Linq;
 
 namespace EventHub.Models
 {
@@ -7,7 +10,8 @@ namespace EventHub.Models
     {
         public int Id { get; set; }
 
-        public bool IsCanceled { get; set; }
+        //after implementing cancel method, this shouldn't be able to modify outside the class
+        public bool IsCanceled { get; private set; }
 
         public ApplicationUser Artist { get; set; }     //navigation prop
 
@@ -24,5 +28,28 @@ namespace EventHub.Models
 
         [Required]
         public byte GenreId { get; set; }    //this and ArtistId are foreign keys
+
+        //private so i can't be overwritten with another collection
+        public ICollection<Attendance> Attendances { get; private set; }
+
+        public Event()
+        {
+            Attendances = new Collection<Attendance>();
+        }
+
+        public void CancelEvent()
+        {
+            IsCanceled = true;
+
+            //create notification about cancelation
+            var notification = new Notification(this, NotificationType.EventCanceled);
+
+            //for each attendee we need to create UserNotification object
+            //by delegating to the domain (OOP) instead of having fat controlers
+            foreach (var attendee in Attendances.Select(a => a.Attendee))
+            {
+                attendee.Notify(notification);
+            }
+        }
     }
 }

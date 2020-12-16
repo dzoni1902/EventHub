@@ -1,5 +1,6 @@
 ﻿using EventHub.Models;
 using Microsoft.AspNet.Identity;
+using System.Data.Entity;
 using System.Linq;
 using System.Web.Http;
 
@@ -19,14 +20,16 @@ namespace EventHub.Controllers.WebAPI
         public IHttpActionResult Cancel(int id)
         {
             var userId = User.Identity.GetUserId();
-            var eventObject = _context.Events.Single(e => e.Id == id && e.ArtistId == userId);
+            var eventObject = _context.Events
+                .Include(e => e.Attendances.Select(a => a.Attendee))
+                .Single(e => e.Id == id && e.ArtistId == userId);
 
             if (eventObject.IsCanceled)
             {
                 return NotFound();
             }
 
-            eventObject.IsCanceled = true;
+            eventObject.CancelEvent();
 
             _context.SaveChanges();
 

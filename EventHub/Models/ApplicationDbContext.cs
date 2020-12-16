@@ -11,6 +11,9 @@ namespace EventHub.Models
         public DbSet<Genre> Genres { get; set; }
         public DbSet<Attendance> Attendances { get; set; }
         public DbSet<Following> Followings { get; set; }
+        public DbSet<Notification> Notifications { get; set; }
+        public DbSet<UserNotification> UserNotifications { get; set; }
+
 
         public ApplicationDbContext()
             : base("DefaultConnection", throwIfV1Schema: false)
@@ -24,10 +27,11 @@ namespace EventHub.Models
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
+            //CONFIGURATION between classes
             //to prevent cascade delete in one path (unnecesary if we delete an event)
             modelBuilder.Entity<Attendance>()
                 .HasRequired(a => a.Event)
-                .WithMany()
+                .WithMany(e => e.Attendances)
                 .WillCascadeOnDelete(false);
 
             modelBuilder.Entity<ApplicationUser>()
@@ -39,6 +43,13 @@ namespace EventHub.Models
                 .HasMany(u => u.Followees)
                 .WithRequired(f => f.Follower)  //each followee has a required follower
                 .WillCascadeOnDelete(false);
+
+            //error between UserNotifications and AspNetUsers
+            modelBuilder.Entity<UserNotification>()
+                .HasRequired(un => un.User)
+                .WithMany(u => u.UserNotifications)     //notifications (but no nav prop in the class)
+                .WillCascadeOnDelete(false);
+
 
             base.OnModelCreating(modelBuilder);
         }

@@ -15,15 +15,17 @@ namespace EventHub.Models
         [StringLength(100)]
         public string Name { get; set; }
 
-        //every user must have a list of folowers and followees
+        //every user must have a list of folowers and followees, NAVIGATION props
         public ICollection<Following> Followers { get; set; }
         public ICollection<Following> Followees { get; set; }
+        public ICollection<UserNotification> UserNotifications { get; set; }
 
         //ALWAYS initialize collestions inside the class, it's the class's responsibility
         public ApplicationUser()
         {
             Followers = new Collection<Following>();
             Followees = new Collection<Following>();
+            UserNotifications = new Collection<UserNotification>();
         }
 
         public async Task<ClaimsIdentity> GenerateUserIdentityAsync(UserManager<ApplicationUser> manager)
@@ -32,6 +34,13 @@ namespace EventHub.Models
             var userIdentity = await manager.CreateIdentityAsync(this, DefaultAuthenticationTypes.ApplicationCookie);
             // Add custom user claims here
             return userIdentity;
+        }
+
+        public void Notify(Notification notification)
+        {
+            var userNotification = new UserNotification(this, notification);
+            //same effect as adding userNotification to the _context
+            UserNotifications.Add(userNotification);
         }
     }
 }

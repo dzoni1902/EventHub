@@ -226,6 +226,10 @@
     <Compile Include="Migrations\202012151205212_AddIsCanceledToEvent.Designer.cs">
       <DependentUpon>202012151205212_AddIsCanceledToEvent.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202012151843007_AddNotification.cs" />
+    <Compile Include="Migrations\202012151843007_AddNotification.Designer.cs">
+      <DependentUpon>202012151843007_AddNotification.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\ApplicationDbContext.cs" />
     <Compile Include="Models\Attendance.cs" />
@@ -234,6 +238,9 @@
     <Compile Include="Models\Genre.cs" />
     <Compile Include="Models\ApplicationUser.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
+    <Compile Include="Models\Notification.cs" />
+    <Compile Include="Models\NotificationType.cs" />
+    <Compile Include="Models\UserNotification.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
     <Compile Include="ViewModels\EventFormViewModel.cs" />
@@ -354,6 +361,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202012151205212_AddIsCanceledToEvent.resx">
       <DependentUpon>202012151205212_AddIsCanceledToEvent.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202012151843007_AddNotification.resx">
+      <DependentUpon>202012151843007_AddNotification.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
