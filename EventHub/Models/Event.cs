@@ -42,10 +42,27 @@ namespace EventHub.Models
             IsCanceled = true;
 
             //create notification about cancelation
-            var notification = new Notification(this, NotificationType.EventCanceled);
+            var notification = Notification.EventCanceled(this);
 
             //for each attendee we need to create UserNotification object
             //by delegating to the domain (OOP) instead of having fat controlers
+            foreach (var attendee in Attendances.Select(a => a.Attendee))
+            {
+                attendee.Notify(notification);
+            }
+        }
+
+
+        public void Modify(string venue, DateTime dateTime, byte genre)
+        {
+            var notification = Notification.EventUpdated(this, this.DateTime, this.Venue);
+
+            Venue = venue;
+            DateTime = dateTime;
+            GenreId = genre;
+
+            //for each attendee we need to create UserNotification object
+            //by delegating to the domain (OOP) we keep clean controlers
             foreach (var attendee in Attendances.Select(a => a.Attendee))
             {
                 attendee.Notify(notification);

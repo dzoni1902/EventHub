@@ -40,6 +40,32 @@ namespace EventHub.Controllers
             return View("EventForm", viewModel);
         }
 
+        [Authorize]
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Update(EventFormViewModel viewModel)
+        {
+            if (!ModelState.IsValid)
+            {
+                //we need to initialize and populate Genres prop since viewModel 
+                //is new model initialized with values from the httpRequest
+                viewModel.Genres = _context.Genres.ToList();
+                return View("EventForm", viewModel);
+            }
+
+            var userId = User.Identity.GetUserId();
+            //eager load attendences and atendees
+            var eventObject = _context.Events
+                .Include(e => e.Attendances.Select(a => a.Attendee))
+                .Single(e => e.Id == viewModel.Id && e.ArtistId == userId);
+
+            eventObject.Modify(viewModel.Venue, viewModel.GetDateTime(), viewModel.Genre);
+
+            _context.SaveChanges();
+
+            return RedirectToAction("Mine", "Events");
+        }
+
         //Action for clicking on Add an Event link in navbar
         [Authorize]
         public ActionResult Create()
@@ -82,30 +108,6 @@ namespace EventHub.Controllers
             return RedirectToAction("Mine", "Events");
         }
 
-        [Authorize]
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Update(EventFormViewModel viewModel)
-        {
-            if (!ModelState.IsValid)
-            {
-                //we need to initialize and populate Genres prop since viewModel 
-                //is new model initialized with values from the httpRequest
-                viewModel.Genres = _context.Genres.ToList();
-                return View("EventForm", viewModel);
-            }
-
-            var userId = User.Identity.GetUserId();
-            var eventObject = _context.Events.Single(e => e.Id == viewModel.Id && e.ArtistId == userId);
-
-            eventObject.Venue = viewModel.Venue;
-            eventObject.DateTime = viewModel.GetDateTime();
-            eventObject.GenreId = viewModel.Genre;
-
-            _context.SaveChanges();
-
-            return RedirectToAction("Mine", "Events");
-        }
 
         [Authorize]
         [HttpGet]
