@@ -24,7 +24,7 @@ namespace EventHub.Controllers.WebAPI
             var userId = User.Identity.GetUserId();
 
             var notifications = _context.UserNotifications
-                .Where(n => n.UserId == userId)
+                .Where(un => un.UserId == userId && !un.IsRead)
                 .Select(un => un.Notification)
                 .Include(n => n.Event.Artist)
                 .ToList();
