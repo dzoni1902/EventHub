@@ -1,11 +1,11 @@
 ﻿using AutoMapper;
+using EventHub.Dtos;
 using EventHub.Models;
 using Microsoft.AspNet.Identity;
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
 using System.Web.Http;
-using EventHub.Dtos;
 
 namespace EventHub.Controllers.WebAPI
 {
@@ -18,6 +18,9 @@ namespace EventHub.Controllers.WebAPI
         {
             _context = new ApplicationDbContext();
         }
+
+        //APIs should receive and return DTOs, not domain objects because
+        //they are internal of the app, could be changed, and expose to much...
 
         public IEnumerable<NotificationDto> GetNewNotifications()
         {
