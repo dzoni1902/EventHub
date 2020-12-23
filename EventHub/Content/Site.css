@@ -39,6 +39,11 @@ span.field-validation-error {
     would cause my changes to be lost.
 */
 
+.popover {
+    box-shadow: none;
+    -webkit-box-shadow: none;
+}
+
 .navbar-inverse {
     background-color: #ff4342;
     border-color: #ff4342;
@@ -178,5 +183,28 @@ h6,
 
 .events > li:hover .actions {
     display: block;
+}
+
+/*remove padding only on this specific popover*/
+.popover-notifications .popover-content {
+    padding: 0;
+}
+
+.popover-notifications ul.notifications {
+    list-style: none;
+    padding-left: 0;
+}
+
+.popover-notifications ul.notifications > li {
+    border-bottom: 1px solid #ddd;
+    padding: 10px;
+}
+
+.popover-notifications ul.notifications > li:last-child {
+    border-bottom: none;
+}
+
+.popover-notifications ul.notifications > li .highlight {
+    font-weight: bold;
 }
 
