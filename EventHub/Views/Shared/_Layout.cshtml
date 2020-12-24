@@ -78,24 +78,38 @@
 @* here we write JS code for notifications, since LoginPartial view is part of _Layout.cshtml *@
 <script>
     $(document).ready(function() {      //callback f with notifications from the server
-        $.getJSON("/api/notifications", function (notifications) {
-            if (notifications.length == 0)  //display the badge and popover if there is any new notification
+        $.getJSON("/api/notifications", function (notificationWrapper) {
+            if (notificationWrapper.notifications.length == 0)  //display the badge and popover if there is any new notification
                 return;
-
-            $(".js-notifications-count")
-                .text(notifications.length)
-                .removeClass("hide")
-                .addClass("animated bounceInDown");
-
+            //we have some new notification
+            if (notificationWrapper.notificationCounter > 0) {
+                $(".js-notifications-count")
+                    .text(notificationWrapper.notifications.length)
+                    .removeClass("hide")
+                    .addClass("animated bounceInDown");
+            } else {
+                $(".js-notifications-count")
+                    .text("");
+            }
+           
             $(".notifications").popover({
                 html: true,
                 title: "Notifications",
                 content: function() {
                     var compiled = _.template($("#notifications-template").html());
-                    return compiled({ notifications: notifications });
+                    return compiled({ notifications: notificationWrapper.notifications });
                 },
                 placement: "bottom",
-                template: '<div class="popover popover-notifications" role="tooltip"><div class="arrow"></div><h3 class="popover-title"></h3><div class="popover-content"></div></div>'
+                template:
+                    '<div class="popover popover-notifications" role="tooltip"><div class="arrow"></div><h3 class="popover-title"></h3><div class="popover-content"></div></div>'
+            }).on("shown.bs.popover", function() {
+                //here we call an api to mark notifications as read
+                $.post("/api/notifications/markAsRead")
+                    .done(function() {
+                        $(".js-notifications-count")
+                            .text("")
+                            .addClass("hide");
+                    });
             });
         });
     });

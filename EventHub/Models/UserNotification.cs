@@ -20,7 +20,7 @@ namespace EventHub.Models
 
         public Notification Notification { get; private set; }
 
-        public bool IsRead { get; set; }
+        public bool IsRead { get; private set; }
 
         //domain model needs to protect its valid state, in order to create new
         //userNotification we require User and Notif, which means they can't be null
@@ -36,5 +36,9 @@ namespace EventHub.Models
             Notification = notification ?? throw new ArgumentNullException(nameof(notification));
         }
 
+        public void Read()
+        {
+            IsRead = true;
+        }
     }
 }

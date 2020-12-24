@@ -193,6 +193,7 @@
     <Compile Include="Dtos\GenreDto.cs" />
     <Compile Include="Dtos\NotificationDto.cs" />
     <Compile Include="Controllers\WebAPI\NotificationsController.cs" />
+    <Compile Include="Dtos\NotificationWrapperDto.cs" />
     <Compile Include="Dtos\UserDto.cs" />
     <Compile Include="Dtos\AttendanceDto.cs" />
     <Compile Include="Dtos\FollowingDto.cs" />
