@@ -17,7 +17,7 @@ namespace EventHub.Controllers
             _context = new ApplicationDbContext();
         }
 
-        public ActionResult Index()
+        public ActionResult Index(string query = null)
         {
             var upcomingEvents = _context.Events
                 .Include(e => e.Artist)
@@ -25,11 +25,22 @@ namespace EventHub.Controllers
                 .Where(e => e.DateTime > DateTime.Now && !e.IsCanceled)
                 .ToList();
 
+            //if there is a query, we need to apply a filter
+            if (!String.IsNullOrWhiteSpace(query))
+            {
+                upcomingEvents = upcomingEvents
+                    .Where(e => e.Artist.Name.ToLowerInvariant().Contains(query.ToLowerInvariant())
+                                || e.Genre.Name.ToLowerInvariant().Contains(query.ToLowerInvariant())
+                                || e.Venue.ToLowerInvariant().Contains(query.ToLowerInvariant()))
+                    .ToList();
+            }
+
             var viewModel = new EventsViewModel
             {
                 UpcomingEvents = upcomingEvents,
                 ShowActions = User.Identity.IsAuthenticated,
-                Heading = "Upcoming Events"
+                Heading = "Upcoming Events",
+                SearchTerm = query      //to autopopulate search box
             };
 
             return View("Events", viewModel);

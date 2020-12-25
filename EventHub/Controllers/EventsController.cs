@@ -147,5 +147,12 @@ namespace EventHub.Controllers
 
             return View(events);
         }
+
+        [HttpPost]
+        public ActionResult Search(EventsViewModel viewModel)
+        {
+            //here instead of looking the list of events by search param, redirect to Home controller
+            return RedirectToAction("Index", "Home", new { query = viewModel.SearchTerm });
+        }
     }
 }

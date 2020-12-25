@@ -116,8 +116,13 @@ h6,
     -ms-border-radius: 9px;
     border-radius: 9px;
     height: 44px;
+    transition: none;
+    -webkit-transition: none;
 }
 
+.form-control:focus {
+    box-shadow: none;
+}
 
 .btn {
     /*font-size: 17px;
@@ -206,5 +211,13 @@ h6,
 
 .popover-notifications ul.notifications > li .highlight {
     font-weight: bold;
+}
+
+#searchEvents {
+    width: 400px;
+}
+
+#searchEvents input {
+    max-width: none;
 }
 
