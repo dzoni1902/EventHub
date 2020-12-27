@@ -19,6 +19,36 @@ namespace EventHub.Controllers
 
         //Edit & Create actions take us to page where we CREATE new or EDIT existing event
         //these actions return VIEW's, GET actions
+
+        public ActionResult Details(int id)
+        {
+            var eventObject = _context.Events
+                .Include(e => e.Genre)
+                .Include(e => e.Artist)
+                .SingleOrDefault(e => e.Id == id);
+
+            if (eventObject == null)
+            {
+                return HttpNotFound();
+            }
+
+            var viewModel = new EventDetailsViewModel { Event = eventObject };
+
+            if (User.Identity.IsAuthenticated)
+            {
+                var userId = User.Identity.GetUserId();
+
+                viewModel.IsAttending = _context.Attendances
+                    .Any(a => a.AttendeeId == userId && a.EventId == eventObject.Id);
+
+
+                viewModel.IsFollowing = _context.Followings
+                    .Any(f => f.FollowerId == userId && f.FolloweeId == eventObject.ArtistId);
+            }
+
+            return View("Details", viewModel);
+        }
+
         [Authorize]
         public ActionResult Edit(int id)
         {

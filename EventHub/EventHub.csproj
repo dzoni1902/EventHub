@@ -253,6 +253,7 @@
     <Compile Include="Models\UserNotification.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
+    <Compile Include="ViewModels\EventDetailsViewModel.cs" />
     <Compile Include="ViewModels\EventFormViewModel.cs" />
     <Compile Include="ViewModels\ExternalLoginConfirmationViewModel.cs" />
     <Compile Include="ViewModels\ExternalLoginListViewModel.cs" />
@@ -332,6 +333,7 @@
     <Content Include="Views\Events\EventForm.cshtml" />
     <Content Include="Views\Folowees\Index.cshtml" />
     <Content Include="Views\Events\Mine.cshtml" />
+    <Content Include="Views\Events\Details.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
