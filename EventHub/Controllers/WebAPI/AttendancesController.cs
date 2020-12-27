@@ -1,8 +1,8 @@
-﻿using System.Linq;
-using System.Web.Http;
-using EventHub.Dtos;
+﻿using EventHub.Dtos;
 using EventHub.Models;
 using Microsoft.AspNet.Identity;
+using System.Linq;
+using System.Web.Http;
 
 namespace EventHub.Controllers.WebAPI
 {
@@ -38,6 +38,23 @@ namespace EventHub.Controllers.WebAPI
             _context.SaveChanges();
 
             return Ok();
+        }
+
+        [HttpDelete]
+        public IHttpActionResult DeleteAttendance(int id)
+        {
+            var userId = User.Identity.GetUserId();
+            var attendance = _context.Attendances
+                .SingleOrDefault(a => a.EventId == id && a.AttendeeId == userId);
+
+            if (attendance == null)
+            {
+                return NotFound();
+            }
+
+            _context.Attendances.Remove(attendance);
+            _context.SaveChanges();
+            return Ok(id);
         }
     }
 }
