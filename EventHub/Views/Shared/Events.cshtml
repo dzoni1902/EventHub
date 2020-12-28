@@ -15,7 +15,7 @@
         </div>
     </div> 
 }
-<ul class="events vertical-offset4">
+<ul id="events" class="events vertical-offset4">
     @foreach (var evnt in Model.UpcomingEvents)
     {
         <li>
@@ -55,36 +55,7 @@
 {
     <script>
         $(document).ready(function () {
-            $(".js-toggle-attendance").click(function(e) {
-                //making an ajax call to the API using POST method:
-                var button = $(e.target);
-                //we need to check if attendance already exists
-                if (button.hasClass("btn-default")) {
-                    $.post("/api/attendances", { EventId: button.attr("data-event-id") })
-                        .done(function() {
-                            button.removeClass("btn-default")
-                                .addClass("btn-info")
-                                .text("Going");
-                        })
-                        .fail(function() {
-                            alert("Something failed!");
-                        });
-                } else {
-                    $.ajax({
-                            url: "/api/attendances/" + button.attr("data-event-id"),
-                            method: "DELETE"
-                        })
-                        .done(function() {
-                            button.removeClass("btn-info")
-                                .addClass("btn-default")
-                                .text("Going ?");
-                        })
-                        .fail(function() {
-                            alert("Something failed!");
-                        });
-                }
-                
-            });
+            EventsFEController.init("#events");
 
             $(".js-toggle-follow").click(function(e) {
                 var button = $(e.target);
