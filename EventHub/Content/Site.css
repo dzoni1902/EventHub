@@ -178,7 +178,9 @@ h6,
 }
 
 .events > li .details .genre { 
-    font-size: 15px;
+    font-size: 14px;
+    display: block;
+    margin-bottom: 4px;
 }
 
 .events > li .actions {

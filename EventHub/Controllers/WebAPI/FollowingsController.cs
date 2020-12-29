@@ -1,8 +1,8 @@
-﻿using System.Linq;
-using System.Web.Http;
-using EventHub.Dtos;
+﻿using EventHub.Dtos;
 using EventHub.Models;
 using Microsoft.AspNet.Identity;
+using System.Linq;
+using System.Web.Http;
 
 namespace EventHub.Controllers.WebAPI
 {
@@ -36,6 +36,23 @@ namespace EventHub.Controllers.WebAPI
             _context.SaveChanges();
 
             return Ok();
+        }
+
+        [HttpDelete]
+        public IHttpActionResult Unfollow(string id)
+        {
+            var userId = User.Identity.GetUserId();
+            var folllowing = _context.Followings
+                .SingleOrDefault(f => f.FolloweeId == id && f.FollowerId == userId);
+
+            if (folllowing == null)
+            {
+                return NotFound();
+            }
+
+            _context.Followings.Remove(folllowing);
+            _context.SaveChanges();
+            return Ok(id);
         }
     }
 }

@@ -31,10 +31,6 @@
                     {
                         <span class="label label-warning">Canceled</span>
                     }
-                    @if (Model.ShowActions)
-                    {
-                        <button data-followee-id="@evnt.ArtistId" class="btn btn-link btn-sm js-toggle-follow">Follow</button>
-                    }
                 </span>
                 <span class="genre">@evnt.Genre.Name</span>
                 @if (Model.ShowActions && !evnt.IsCanceled)
@@ -42,7 +38,7 @@
                 <button data-event-id="@evnt.Id"
                         class="btn
                             @(Model.Attendances.Contains(evnt.Id) ? "btn-info" : "btn-default")
-                            btn-sm pull-right js-toggle-attendance">
+                            btn-sm js-toggle-attendance">
                     @(Model.Attendances.Contains(evnt.Id) ? "Going" : "Going ?")
                 </button>
                 }
@@ -56,17 +52,6 @@
     <script>
         $(document).ready(function () {
             EventsFEController.init("#events");
-
-            $(".js-toggle-follow").click(function(e) {
-                var button = $(e.target);
-                $.post("/api/followings", { FolloweeId: button.attr("data-followee-id") })
-                    .done(function() {
-                        button.text("Following");
-                    })
-                    .fail(function() {
-                        alert("Something failed!");
-                    });
-            });
         });
     </script>
 }

@@ -9,7 +9,9 @@ namespace EventHub
         {
             bundles.Add(new ScriptBundle("~/bundles/app").Include(
                         "~/Scripts/app/services/attendanceService.js",
+                        "~/Scripts/app/services/followingService.js",
                         "~/Scripts/app/FEcontrollers/eventsController.js",
+                        "~/Scripts/app/FEcontrollers/eventDetailsController.js",
                         "~/Scripts/app/app.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/lib").Include(
