@@ -1,9 +1,8 @@
 ﻿using AutoMapper;
 using EventHub.Dtos;
 using EventHub.Models;
+using EventHub.Persistence;
 using Microsoft.AspNet.Identity;
-using System.Collections.Generic;
-using System.Data.Entity;
 using System.Linq;
 using System.Web.Http;
 
@@ -13,10 +12,12 @@ namespace EventHub.Controllers.WebAPI
     public class NotificationsController : ApiController
     {
         private readonly ApplicationDbContext _context;
+        private readonly UnitOfWork _unitOfWork;
 
         public NotificationsController()
         {
             _context = new ApplicationDbContext();
+            _unitOfWork = new UnitOfWork(_context);
         }
 
         //APIs should receive and return DTOs, not domain objects because
@@ -26,23 +27,13 @@ namespace EventHub.Controllers.WebAPI
         {
             var userId = User.Identity.GetUserId();
 
-            var newNotifications = _context.UserNotifications
-                .Where(un => un.UserId == userId && !un.IsRead)
-                .Select(un => un.Notification)
-                .Include(n => n.Event.Artist)
-                .ToList();
+            var newNotifications = _unitOfWork.Notifications.GetNewNotifications(userId).ToList();
 
-            int newNotificationsCount = newNotifications.Count;
+            var newNotificationsCount = newNotifications.Count;
 
             if (newNotificationsCount == 0)
             {
-                var recentNotifications = _context.UserNotifications
-                    .Where(un => un.UserId == userId)
-                    .Select(un => un.Notification)
-                    .Include(n => n.Event.Artist)
-                    .OrderByDescending(n => n.DateTime)
-                    .Take(4)
-                    .ToList();
+                var recentNotifications = _unitOfWork.Notifications.GetRecentNotifications(userId);
 
                 return new NotificationWrapperDto
                 {
@@ -63,13 +54,11 @@ namespace EventHub.Controllers.WebAPI
         {
             var userId = User.Identity.GetUserId();
 
-            var notifications = _context.UserNotifications
-                .Where(un => un.UserId == userId && !un.IsRead)
-                .ToList();
+            var notifications = _unitOfWork.Notifications.GetUserNotifications(userId).ToList();
 
             notifications.ForEach(un => un.Read());
 
-            _context.SaveChanges();
+            _unitOfWork.Complete();
 
             return Ok();
         }

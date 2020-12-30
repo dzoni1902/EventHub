@@ -1,5 +1,5 @@
 ﻿using EventHub.Models;
-using EventHub.Repositories;
+using EventHub.Persistence;
 using EventHub.ViewModels;
 using Microsoft.AspNet.Identity;
 using System.Linq;
@@ -10,26 +10,18 @@ namespace EventHub.Controllers
     public class EventsController : Controller
     {
         private readonly ApplicationDbContext _context;
-        private readonly AttendanceRepository _attendanceRepository;
-        private readonly EventRepository _eventRepository;
-        private readonly GenreRepository _genreRepository;
-        private readonly FollowingRepository _followingRepository;
+        private readonly UnitOfWork _unitOfWork;
 
         public EventsController()
         {
             _context = new ApplicationDbContext();
-            _attendanceRepository = new AttendanceRepository(_context);
-            _eventRepository = new EventRepository(_context);
-            _genreRepository = new GenreRepository(_context);
-            _followingRepository = new FollowingRepository(_context);
+            _unitOfWork = new UnitOfWork(_context);
         }
 
-        //Edit & Create actions take us to page where we CREATE new or EDIT existing event
-        //these actions return VIEW's, GET actions
 
         public ActionResult Details(int id)
         {
-            var eventObject = _eventRepository.GetEvent(id);
+            var eventObject = _unitOfWork.Events.GetEvent(id);
 
             if (eventObject == null)
             {
@@ -42,18 +34,21 @@ namespace EventHub.Controllers
             {
                 var userId = User.Identity.GetUserId();
 
-                viewModel.IsAttending = _attendanceRepository.GetAttendance(userId, eventObject.Id) != null;
+                viewModel.IsAttending = _unitOfWork.Attendances.GetAttendance(userId, eventObject.Id) != null;
 
-                viewModel.IsFollowing = _followingRepository.GetFollowing(userId, eventObject.ArtistId) != null;
+                viewModel.IsFollowing = _unitOfWork.Followings.GetFollowing(userId, eventObject.ArtistId) != null;
             }
 
             return View("Details", viewModel);
         }
 
+        //Edit & Create actions take us to page where we CREATE new or EDIT existing event
+        //these actions return VIEW's, GET actions
+
         [Authorize]
         public ActionResult Edit(int id)
         {
-            var eventObject = _eventRepository.GetEvent(id);
+            var eventObject = _unitOfWork.Events.GetEvent(id);
 
             if (eventObject == null)
             {
@@ -89,12 +84,12 @@ namespace EventHub.Controllers
             {
                 //we need to initialize and populate Genres prop since viewModel 
                 //is new model initialized with values from the httpRequest
-                viewModel.Genres = _genreRepository.GetGenres();
+                viewModel.Genres = _unitOfWork.Genres.GetGenres();
                 return View("EventForm", viewModel);
             }
 
             //eager load attendences and atendees
-            var eventObject = _eventRepository.GetEventWithAtendees(viewModel.Id);
+            var eventObject = _unitOfWork.Events.GetEventWithAtendees(viewModel.Id);
 
             if (eventObject == null)
             {
@@ -108,7 +103,7 @@ namespace EventHub.Controllers
 
             eventObject.Modify(viewModel.Venue, viewModel.GetDateTime(), viewModel.Genre);
 
-            _context.SaveChanges();
+            _unitOfWork.Complete();
 
             return RedirectToAction("Mine", "Events");
         }
@@ -119,7 +114,7 @@ namespace EventHub.Controllers
         {
             var viewModel = new EventFormViewModel
             {
-                Genres = _genreRepository.GetGenres(),
+                Genres = _unitOfWork.Genres.GetGenres(),
                 Heading = "Add an Event",
             };
 
@@ -137,7 +132,7 @@ namespace EventHub.Controllers
             {
                 //we need to initialize and populate Genres prop since viewModel is 
                 //new model initialized with values from the httpRequest
-                viewModel.Genres = _genreRepository.GetGenres();
+                viewModel.Genres = _unitOfWork.Genres.GetGenres();
                 return View("EventForm", viewModel);
             }
 
@@ -149,8 +144,8 @@ namespace EventHub.Controllers
                 Venue = viewModel.Venue
             };
 
-            _context.Events.Add(eventObject);
-            _context.SaveChanges();
+            _unitOfWork.Events.Add(eventObject);
+            _unitOfWork.Complete();
 
             return RedirectToAction("Mine", "Events");
         }
@@ -161,8 +156,8 @@ namespace EventHub.Controllers
         public ActionResult Attending()
         {
             var userId = User.Identity.GetUserId();
-            var events = _eventRepository.GetEventsUserAttending(userId);
-            var attendances = _attendanceRepository.GetFutureAttendances(userId).ToLookup(a => a.EventId);
+            var events = _unitOfWork.Events.GetEventsUserAttending(userId);
+            var attendances = _unitOfWork.Attendances.GetFutureAttendances(userId).ToLookup(a => a.EventId);
 
             var viewModel = new EventsViewModel
             {
@@ -180,7 +175,7 @@ namespace EventHub.Controllers
         public ActionResult Mine()
         {
             var userId = User.Identity.GetUserId();
-            var events = _eventRepository.GetUpcomingEventsByArtist(userId);
+            var events = _unitOfWork.Events.GetUpcomingEventsByArtist(userId);
 
             return View(events);
         }

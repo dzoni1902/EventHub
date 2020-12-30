@@ -24,6 +24,17 @@ namespace EventHub.Repositories
         {
             return _context.Attendances
                 .SingleOrDefault(a => a.AttendeeId == userId && a.EventId == eventObjectId);
+
+        }
+
+        public void Add(Attendance attendence)
+        {
+            _context.Attendances.Add(attendence);
+        }
+
+        public void Remove(Attendance attendance)
+        {
+            _context.Attendances.Remove(attendance);
         }
     }
 }

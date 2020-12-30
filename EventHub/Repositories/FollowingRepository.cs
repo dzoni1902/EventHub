@@ -1,4 +1,5 @@
 ﻿using EventHub.Models;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace EventHub.Repositories
@@ -16,6 +17,24 @@ namespace EventHub.Repositories
         {
             return _context.Followings
                 .SingleOrDefault(f => f.FollowerId == userId && f.FolloweeId == artistId);
+        }
+
+        public IEnumerable<ApplicationUser> GetArtistsIFollow(string userId)
+        {
+            return _context.Followings
+                .Where(f => f.FollowerId == userId)
+                .Select(f => f.Followee)
+                .ToList();
+        }
+
+        public void Add(Following following)
+        {
+            _context.Followings.Add(following);
+        }
+
+        public void Remove(Following following)
+        {
+            _context.Followings.Remove(following);
         }
     }
 }

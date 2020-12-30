@@ -1,7 +1,6 @@
 ﻿using EventHub.Models;
+using EventHub.Persistence;
 using Microsoft.AspNet.Identity;
-using System.Data.Entity;
-using System.Linq;
 using System.Web.Http;
 
 namespace EventHub.Controllers.WebAPI
@@ -10,19 +9,28 @@ namespace EventHub.Controllers.WebAPI
     public class EventsController : ApiController
     {
         private readonly ApplicationDbContext _context;
+        private readonly UnitOfWork _unitOfWork;
 
         public EventsController()
         {
             _context = new ApplicationDbContext();
+            _unitOfWork = new UnitOfWork(_context);
         }
 
         [HttpDelete]
         public IHttpActionResult Cancel(int id)
         {
-            var userId = User.Identity.GetUserId();
-            var eventObject = _context.Events
-                .Include(e => e.Attendances.Select(a => a.Attendee))
-                .Single(e => e.Id == id && e.ArtistId == userId);
+            var eventObject = _unitOfWork.Events.GetEventWithAtendees(id);
+
+            if (eventObject == null)
+            {
+                return NotFound();
+            }
+
+            if (eventObject.ArtistId != User.Identity.GetUserId())
+            {
+                return BadRequest("Unauthorized access!");
+            }
 
             if (eventObject.IsCanceled)
             {
@@ -31,7 +39,7 @@ namespace EventHub.Controllers.WebAPI
 
             eventObject.CancelEvent();
 
-            _context.SaveChanges();
+            _unitOfWork.Complete();
 
             return Ok();
         }
