@@ -1,4 +1,5 @@
 ﻿using EventHub.Models;
+using EventHub.Repositories;
 using EventHub.ViewModels;
 using Microsoft.AspNet.Identity;
 using System;
@@ -12,10 +13,12 @@ namespace EventHub.Controllers
     public class HomeController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly AttendanceRepository _attendanceRepository;
 
         public HomeController()
         {
             _context = new ApplicationDbContext();
+            _attendanceRepository = new AttendanceRepository(_context);
         }
 
         public ActionResult Index(string query = null)
@@ -37,9 +40,7 @@ namespace EventHub.Controllers
             }
 
             var userId = User.Identity.GetUserId();
-            var attendances = _context.Attendances
-                .Where(a => a.AttendeeId == userId && a.Event.DateTime > DateTime.Now).ToList()
-                .ToLookup(a => a.EventId);
+            var attendances = _attendanceRepository.GetFutureAttendances(userId).ToLookup(a => a.EventId);
 
             var viewModel = new EventsViewModel
             {

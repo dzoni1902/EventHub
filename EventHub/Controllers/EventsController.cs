@@ -1,8 +1,7 @@
 ﻿using EventHub.Models;
+using EventHub.Repositories;
 using EventHub.ViewModels;
 using Microsoft.AspNet.Identity;
-using System;
-using System.Data.Entity;
 using System.Linq;
 using System.Web.Mvc;
 
@@ -11,10 +10,18 @@ namespace EventHub.Controllers
     public class EventsController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly AttendanceRepository _attendanceRepository;
+        private readonly EventRepository _eventRepository;
+        private readonly GenreRepository _genreRepository;
+        private readonly FollowingRepository _followingRepository;
 
         public EventsController()
         {
             _context = new ApplicationDbContext();
+            _attendanceRepository = new AttendanceRepository(_context);
+            _eventRepository = new EventRepository(_context);
+            _genreRepository = new GenreRepository(_context);
+            _followingRepository = new FollowingRepository(_context);
         }
 
         //Edit & Create actions take us to page where we CREATE new or EDIT existing event
@@ -22,10 +29,7 @@ namespace EventHub.Controllers
 
         public ActionResult Details(int id)
         {
-            var eventObject = _context.Events
-                .Include(e => e.Genre)
-                .Include(e => e.Artist)
-                .SingleOrDefault(e => e.Id == id);
+            var eventObject = _eventRepository.GetEvent(id);
 
             if (eventObject == null)
             {
@@ -38,12 +42,9 @@ namespace EventHub.Controllers
             {
                 var userId = User.Identity.GetUserId();
 
-                viewModel.IsAttending = _context.Attendances
-                    .Any(a => a.AttendeeId == userId && a.EventId == eventObject.Id);
+                viewModel.IsAttending = _attendanceRepository.GetAttendance(userId, eventObject.Id) != null;
 
-
-                viewModel.IsFollowing = _context.Followings
-                    .Any(f => f.FollowerId == userId && f.FolloweeId == eventObject.ArtistId);
+                viewModel.IsFollowing = _followingRepository.GetFollowing(userId, eventObject.ArtistId) != null;
             }
 
             return View("Details", viewModel);
@@ -52,8 +53,17 @@ namespace EventHub.Controllers
         [Authorize]
         public ActionResult Edit(int id)
         {
-            var userId = User.Identity.GetUserId();
-            var eventObject = _context.Events.Single(e => e.Id == id && e.ArtistId == userId);
+            var eventObject = _eventRepository.GetEvent(id);
+
+            if (eventObject == null)
+            {
+                return HttpNotFound();
+            }
+
+            if (eventObject.ArtistId != User.Identity.GetUserId())
+            {
+                return new HttpUnauthorizedResult();
+            }
 
             //we need to initialize viewModel in order form to be populated in Edit page
             var viewModel = new EventFormViewModel
@@ -79,15 +89,22 @@ namespace EventHub.Controllers
             {
                 //we need to initialize and populate Genres prop since viewModel 
                 //is new model initialized with values from the httpRequest
-                viewModel.Genres = _context.Genres.ToList();
+                viewModel.Genres = _genreRepository.GetGenres();
                 return View("EventForm", viewModel);
             }
 
-            var userId = User.Identity.GetUserId();
             //eager load attendences and atendees
-            var eventObject = _context.Events
-                .Include(e => e.Attendances.Select(a => a.Attendee))
-                .Single(e => e.Id == viewModel.Id && e.ArtistId == userId);
+            var eventObject = _eventRepository.GetEventWithAtendees(viewModel.Id);
+
+            if (eventObject == null)
+            {
+                return HttpNotFound();
+            }
+
+            if (eventObject.ArtistId != User.Identity.GetUserId())
+            {
+                return new HttpUnauthorizedResult();
+            }
 
             eventObject.Modify(viewModel.Venue, viewModel.GetDateTime(), viewModel.Genre);
 
@@ -102,7 +119,7 @@ namespace EventHub.Controllers
         {
             var viewModel = new EventFormViewModel
             {
-                Genres = _context.Genres.ToList(),
+                Genres = _genreRepository.GetGenres(),
                 Heading = "Add an Event",
             };
 
@@ -120,7 +137,7 @@ namespace EventHub.Controllers
             {
                 //we need to initialize and populate Genres prop since viewModel is 
                 //new model initialized with values from the httpRequest
-                viewModel.Genres = _context.Genres.ToList();
+                viewModel.Genres = _genreRepository.GetGenres();
                 return View("EventForm", viewModel);
             }
 
@@ -144,17 +161,8 @@ namespace EventHub.Controllers
         public ActionResult Attending()
         {
             var userId = User.Identity.GetUserId();
-
-            var events = _context.Attendances
-                .Where(a => a.AttendeeId == userId)
-                .Select(a => a.Event)
-                .Include(e => e.Artist)
-                .Include(e => e.Genre)
-                .ToList();
-
-            var attendances = _context.Attendances
-                .Where(a => a.AttendeeId == userId && a.Event.DateTime > DateTime.Now).ToList()
-                .ToLookup(a => a.EventId);
+            var events = _eventRepository.GetEventsUserAttending(userId);
+            var attendances = _attendanceRepository.GetFutureAttendances(userId).ToLookup(a => a.EventId);
 
             var viewModel = new EventsViewModel
             {
@@ -167,18 +175,12 @@ namespace EventHub.Controllers
             return View("Events", viewModel);
         }
 
+
         [Authorize]
         public ActionResult Mine()
         {
             var userId = User.Identity.GetUserId();
-
-            var events = _context.Events
-                .Where(e =>
-                    e.ArtistId == userId &&
-                    e.DateTime > DateTime.Now &&
-                    !e.IsCanceled)
-                .Include(e => e.Genre)
-                .ToList();
+            var events = _eventRepository.GetUpcomingEventsByArtist(userId);
 
             return View(events);
         }
