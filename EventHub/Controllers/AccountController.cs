@@ -1,12 +1,12 @@
-﻿using EventHub.Models;
-using EventHub.ViewModels;
-using Microsoft.AspNet.Identity;
+﻿using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
+using EventHub.Core.Models;
+using EventHub.Core.ViewModels;
 
 namespace EventHub.Controllers
 {

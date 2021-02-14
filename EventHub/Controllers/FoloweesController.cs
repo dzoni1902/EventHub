@@ -1,19 +1,17 @@
-﻿using EventHub.Models;
-using EventHub.Persistence;
+﻿using EventHub.Persistence;
 using Microsoft.AspNet.Identity;
 using System.Web.Mvc;
+using EventHub.Core;
 
 namespace EventHub.Controllers
 {
     public class FoloweesController : Controller
     {
-        private readonly ApplicationDbContext _context;
-        private readonly UnitOfWork _unitOfWork;
+        private readonly IUnitOfWork _unitOfWork;
 
-        public FoloweesController()
+        public FoloweesController(IUnitOfWork unitOfWork)
         {
-            _context = new ApplicationDbContext();
-            _unitOfWork = new UnitOfWork(_context);
+            _unitOfWork = unitOfWork;
         }
 
         [Authorize]

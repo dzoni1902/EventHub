@@ -1,17 +1,18 @@
-﻿using EventHub.Models;
-using EventHub.Repositories;
+﻿using EventHub.Core;
+using EventHub.Core.RepositoryInterfaces;
+using EventHub.Persistence.Repositories;
 
 namespace EventHub.Persistence
 {
-    public class UnitOfWork
+    public class UnitOfWork : IUnitOfWork
     {
         private readonly ApplicationDbContext _context;
 
-        public EventRepository Events { get; private set; }
-        public AttendanceRepository Attendances { get; private set; }
-        public GenreRepository Genres { get; private set; }
-        public FollowingRepository Followings { get; private set; }
-        public NotificationRepository Notifications { get; private set; }
+        public IEventRepository Events { get; private set; }
+        public IAttendanceRepository Attendances { get; private set; }
+        public IGenreRepository Genres { get; private set; }
+        public IFollowingRepository Followings { get; private set; }
+        public INotificationRepository Notifications { get; private set; }
 
         public UnitOfWork(ApplicationDbContext context)
         {

@@ -1,21 +1,20 @@
-﻿using EventHub.Models;
-using EventHub.Persistence;
-using EventHub.ViewModels;
+﻿using EventHub.Persistence;
 using Microsoft.AspNet.Identity;
 using System.Linq;
 using System.Web.Mvc;
+using EventHub.Core;
+using EventHub.Core.Models;
+using EventHub.Core.ViewModels;
 
 namespace EventHub.Controllers
 {
     public class EventsController : Controller
     {
-        private readonly ApplicationDbContext _context;
-        private readonly UnitOfWork _unitOfWork;
+        private readonly IUnitOfWork _unitOfWork;
 
-        public EventsController()
+        public EventsController(IUnitOfWork unitOfWork)
         {
-            _context = new ApplicationDbContext();
-            _unitOfWork = new UnitOfWork(_context);
+            _unitOfWork = unitOfWork;
         }
 
 
@@ -65,7 +64,7 @@ namespace EventHub.Controllers
             {
                 Id = eventObject.Id,
                 Heading = "Edit an Event",
-                Genres = _context.Genres.ToList(),
+                Genres = new ApplicationDbContext().Genres.ToList(),
                 Date = eventObject.DateTime.ToString("d MMM yyyy"),
                 Time = eventObject.DateTime.ToString("HH:mm"),
                 Genre = eventObject.GenreId,

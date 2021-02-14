@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
-using EventHub.Dtos;
-using EventHub.Models;
+using EventHub.Core.Dtos;
+using EventHub.Core.Models;
 
 namespace EventHub.App_Start
 {

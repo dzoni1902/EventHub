@@ -1,23 +1,22 @@
 ﻿using AutoMapper;
-using EventHub.Dtos;
-using EventHub.Models;
 using EventHub.Persistence;
 using Microsoft.AspNet.Identity;
 using System.Linq;
 using System.Web.Http;
+using EventHub.Core;
+using EventHub.Core.Dtos;
+using EventHub.Core.Models;
 
 namespace EventHub.Controllers.WebAPI
 {
     [Authorize]
     public class NotificationsController : ApiController
     {
-        private readonly ApplicationDbContext _context;
-        private readonly UnitOfWork _unitOfWork;
+        private readonly IUnitOfWork _unitOfWork;
 
-        public NotificationsController()
+        public NotificationsController(IUnitOfWork unitOfWork)
         {
-            _context = new ApplicationDbContext();
-            _unitOfWork = new UnitOfWork(_context);
+            _unitOfWork = unitOfWork;
         }
 
         //APIs should receive and return DTOs, not domain objects because

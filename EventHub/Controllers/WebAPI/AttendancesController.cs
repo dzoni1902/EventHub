@@ -1,21 +1,20 @@
-﻿using EventHub.Dtos;
-using EventHub.Models;
-using EventHub.Persistence;
+﻿using EventHub.Persistence;
 using Microsoft.AspNet.Identity;
 using System.Web.Http;
+using EventHub.Core;
+using EventHub.Core.Dtos;
+using EventHub.Core.Models;
 
 namespace EventHub.Controllers.WebAPI
 {
     [Authorize]
     public class AttendancesController : ApiController
     {
-        private readonly ApplicationDbContext _context;
-        private readonly UnitOfWork _unitOfWork;
+        private readonly IUnitOfWork _unitOfWork;
 
-        public AttendancesController()
+        public AttendancesController(IUnitOfWork unitOfWork)
         {
-            _context = new ApplicationDbContext();
-            _unitOfWork = new UnitOfWork(_context);
+            _unitOfWork = unitOfWork;
         }
 
         [HttpPost]

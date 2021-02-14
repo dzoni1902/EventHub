@@ -1,20 +1,18 @@
-﻿using EventHub.Models;
-using EventHub.Persistence;
+﻿using EventHub.Persistence;
 using Microsoft.AspNet.Identity;
 using System.Web.Http;
+using EventHub.Core;
 
 namespace EventHub.Controllers.WebAPI
 {
     [Authorize]
     public class EventsController : ApiController
     {
-        private readonly ApplicationDbContext _context;
-        private readonly UnitOfWork _unitOfWork;
+        private readonly IUnitOfWork _unitOfWork;
 
-        public EventsController()
+        public EventsController(IUnitOfWork unitOfWork)
         {
-            _context = new ApplicationDbContext();
-            _unitOfWork = new UnitOfWork(_context);
+            _unitOfWork = unitOfWork;
         }
 
         [HttpDelete]
