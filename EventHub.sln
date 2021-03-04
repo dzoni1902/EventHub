@@ -5,6 +5,8 @@ VisualStudioVersion = 15.0.28307.1300
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EventHub", "EventHub\EventHub.csproj", "{91FE7B34-5744-486C-8B81-BCEA27275DE8}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EventHub.Tests", "EventHub.Tests\EventHub.Tests.csproj", "{6A8FF28C-728A-4867-B410-181CAD436CA3}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{91FE7B34-5744-486C-8B81-BCEA27275DE8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{91FE7B34-5744-486C-8B81-BCEA27275DE8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{91FE7B34-5744-486C-8B81-BCEA27275DE8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6A8FF28C-728A-4867-B410-181CAD436CA3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6A8FF28C-728A-4867-B410-181CAD436CA3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6A8FF28C-728A-4867-B410-181CAD436CA3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6A8FF28C-728A-4867-B410-181CAD436CA3}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

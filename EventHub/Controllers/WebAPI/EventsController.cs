@@ -1,7 +1,6 @@
-﻿using EventHub.Persistence;
+﻿using EventHub.Core;
 using Microsoft.AspNet.Identity;
 using System.Web.Http;
-using EventHub.Core;
 
 namespace EventHub.Controllers.WebAPI
 {
@@ -25,14 +24,14 @@ namespace EventHub.Controllers.WebAPI
                 return NotFound();
             }
 
-            if (eventObject.ArtistId != User.Identity.GetUserId())
-            {
-                return BadRequest("Unauthorized access!");
-            }
-
             if (eventObject.IsCanceled)
             {
                 return NotFound();
+            }
+
+            if (eventObject.ArtistId != User.Identity.GetUserId())
+            {
+                return Unauthorized();
             }
 
             eventObject.CancelEvent();
