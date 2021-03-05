@@ -17,7 +17,8 @@ namespace EventHub.Tests.Controllers.Api
         private Mock<IEventRepository> _mockRepository;
         private string _userId;
 
-        public EventsControllerTests()
+        [TestInitialize]
+        public void TestInitialize()
         {
             _mockRepository = new Mock<IEventRepository>();
 

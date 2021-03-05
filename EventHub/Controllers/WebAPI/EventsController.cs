@@ -19,12 +19,7 @@ namespace EventHub.Controllers.WebAPI
         {
             var eventObject = _unitOfWork.Events.GetEventWithAtendees(id);
 
-            if (eventObject == null)
-            {
-                return NotFound();
-            }
-
-            if (eventObject.IsCanceled)
+            if (eventObject == null || eventObject.IsCanceled)
             {
                 return NotFound();
             }
