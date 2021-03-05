@@ -13,7 +13,7 @@ namespace EventHub.Tests.Controllers.Api
     [TestClass]
     public class EventsControllerTests
     {
-        private static EventsController _controller;
+        private EventsController _controller;
         private Mock<IEventRepository> _mockRepository;
         private string _userId;
 

@@ -1,17 +1,17 @@
-﻿using System;
+﻿using EventHub.Core.Models;
+using EventHub.Core.RepositoryInterfaces;
+using System;
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
-using EventHub.Core.Models;
-using EventHub.Core.RepositoryInterfaces;
 
 namespace EventHub.Persistence.Repositories
 {
     public class EventRepository : IEventRepository
     {
-        private readonly ApplicationDbContext _context;
+        private readonly IApplicationDbContext _context;
 
-        public EventRepository(ApplicationDbContext context)
+        public EventRepository(IApplicationDbContext context)
         {
             _context = context;
         }
