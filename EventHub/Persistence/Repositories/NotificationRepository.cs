@@ -1,16 +1,17 @@
-﻿using System.Collections.Generic;
-using System.Data.Entity;
-using System.Linq;
+﻿using EventHub.Core;
 using EventHub.Core.Models;
 using EventHub.Core.RepositoryInterfaces;
+using System.Collections.Generic;
+using System.Data.Entity;
+using System.Linq;
 
 namespace EventHub.Persistence.Repositories
 {
     public class NotificationRepository : INotificationRepository
     {
-        private readonly ApplicationDbContext _context;
+        private readonly IApplicationDbContext _context;
 
-        public NotificationRepository(ApplicationDbContext context)
+        public NotificationRepository(IApplicationDbContext context)
         {
             _context = context;
         }

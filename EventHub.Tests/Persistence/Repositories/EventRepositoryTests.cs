@@ -1,5 +1,5 @@
-﻿using EventHub.Core.Models;
-using EventHub.Persistence;
+﻿using EventHub.Core;
+using EventHub.Core.Models;
 using EventHub.Persistence.Repositories;
 using EventHub.Tests.Extensions;
 using FluentAssertions;

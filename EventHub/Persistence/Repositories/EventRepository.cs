@@ -1,4 +1,5 @@
-﻿using EventHub.Core.Models;
+﻿using EventHub.Core;
+using EventHub.Core.Models;
 using EventHub.Core.RepositoryInterfaces;
 using System;
 using System.Collections.Generic;

@@ -1,7 +1,7 @@
 ﻿using System.Data.Entity;
 using EventHub.Core.Models;
 
-namespace EventHub.Persistence
+namespace EventHub.Core
 {
     public interface IApplicationDbContext
     {

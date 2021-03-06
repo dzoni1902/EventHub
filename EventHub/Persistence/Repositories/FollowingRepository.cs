@@ -1,15 +1,16 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using EventHub.Core;
 using EventHub.Core.Models;
 using EventHub.Core.RepositoryInterfaces;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace EventHub.Persistence.Repositories
 {
     public class FollowingRepository : IFollowingRepository
     {
-        private readonly ApplicationDbContext _context;
+        private readonly IApplicationDbContext _context;
 
-        public FollowingRepository(ApplicationDbContext context)
+        public FollowingRepository(IApplicationDbContext context)
         {
             _context = context;
         }

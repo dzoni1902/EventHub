@@ -219,7 +219,7 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Persistence\IApplicationDbContext.cs" />
+    <Compile Include="Core\IApplicationDbContext.cs" />
     <Compile Include="Persistence\Migrations\202012081024450_InitialModel.cs" />
     <Compile Include="Persistence\Migrations\202012081024450_InitialModel.Designer.cs">
       <DependentUpon>202012081024450_InitialModel.cs</DependentUpon>
